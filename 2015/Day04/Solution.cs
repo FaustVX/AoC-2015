@@ -6,7 +6,11 @@ namespace AdventOfCode.Y2015.Day04;
 [ProblemName("The Ideal Stocking Stuffer")]
 public class Solution : Solver //, IDisplay
 {
+    delegate bool IsValid(Span<byte> span);
     public object PartOne(string input)
+    => Execute(input, static destination => destination is [0x00, 0x00, <= 0x0f, ..]);
+
+    static int Execute(string input, IsValid isValid)
     {
         ReadOnlySpan<byte> nines = stackalloc byte[]
         {
@@ -27,7 +31,7 @@ public class Solution : Solver //, IDisplay
         {
             ToSpan(i, source.Slice(input.Length));
             MD5.HashData(source, destination);
-            if (destination is [0x00, 0x00, <= 0x0f, ..])
+            if (isValid(destination))
                 return i;
             if (source.Slice(input.Length).SequenceEqual(nines[..source.Slice(input.Length).Length]))
                 Enlarge(ref source);
@@ -63,7 +67,6 @@ public class Solution : Solver //, IDisplay
     }
 
     public object PartTwo(string input)
-    {
-        return 0;
-    }
+    => Execute(input, static destination => destination is [0x00, 0x00, 0x00, ..]);
+
 }
