@@ -19,6 +19,18 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        var floor = 0;
+        for (var i = 0; i < input.Length; i++)
+        {
+            floor += input[i] switch
+            {
+                '(' => +1,
+                ')' => -1,
+                _ => throw new UnreachableException(),
+            };
+            if (floor == -1)
+                return i + 1;
+        }
+        throw new UnreachableException();
     }
 }
