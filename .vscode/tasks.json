@@ -1,0 +1,157 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/adventofcode.csproj"
+            ],
+            "problemMatcher": "$msCompile",
+            "options": {
+                "statusbar": {
+                    "hide": true,
+                }
+            }
+        },
+        {
+            "label": "update today",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "update",
+                "today"
+            ],
+            "problemMatcher": [],
+            "options": {
+                "statusbar": {
+                    "tooltip": "Retrive datas from AoC"
+                },
+                "env": {
+                    "SESSION": "${input:session}"
+                }
+            },
+        },
+        {
+            "label": "update",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "update",
+                "${input:year}/${input:day}"
+            ],
+            "problemMatcher": [],
+            "options": {
+                "statusbar": {
+                    "tooltip": "Retrive datas from AoC"
+                },
+                "env": {
+                    "SESSION": "${input:session}"
+                }
+            },
+        },
+        {
+            "label": "run",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "--configuration=Release",
+                "--",
+                "${relativeFileDirname}"
+            ],
+            "problemMatcher": [],
+            "options": {
+                "statusbar": {
+                    "filePattern": "Solution\\.cs"
+                }
+            },
+        },
+        {
+            "label": "upload",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "--configuration=Release",
+                "--",
+                "upload",
+                "${relativeFileDirname}",
+            ],
+            "problemMatcher": [],
+            "options": {
+                "env": {
+                    "SESSION": "${input:session}"
+                },
+                "statusbar": {
+                    "filePattern": "Solution\\.cs"
+                }
+            },
+        },
+        {
+            "label": "display",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "display",
+                "${relativeFileDirname}"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "focus": true,
+            },
+            "options": {
+                "statusbar": {
+                    "filePattern": "Solution\\.cs"
+                }
+            },
+        },
+        {
+            "label": "benchmark",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "--configuration=Release",
+                "--",
+                "bench",
+                "${relativeFileDirname}"
+            ],
+            "problemMatcher": [],
+            "options": {
+                "statusbar": {
+                    "filePattern": "Solution\\.cs"
+                }
+            },
+        },
+    ],
+    "inputs": [
+        {
+            "id": "session",
+            "type": "command",
+            "command": "memento.promptString",
+            "args": {
+                "id": "session",
+                "description": "Session Cookie"
+            }
+        },
+        {
+            "id": "year",
+            "type": "command",
+            "command": "memento.promptString",
+            "args": {
+                "id": "year",
+                "description": "Current year (YYYY)"
+            }
+        },
+        {
+            "id": "day",
+            "type": "command",
+            "command": "memento.pickString",
+            "args": {
+                "id": "day",
+                "options": ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"],
+                "description": "Current day"
+            }
+        },
+    ]
+}
