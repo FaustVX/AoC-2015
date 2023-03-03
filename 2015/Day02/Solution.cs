@@ -9,7 +9,9 @@ public class Solution : Solver //, IDisplay
         private int Side1 => L*W;
         private int Side2 => W*H;
         private int Side3 => H*L;
+        private int Volume => L*W*H;
         public int Surface => 2*Side1 + 2*Side2 + 2*Side3 + Math.Min(Side1, Math.Min(Side2, Side3));
+        public int BowLength => 2*(L+W+H - Math.Max(L, Math.Max(W, H))) + Volume;
         public static Box Parse(ReadOnlyMemory<char> input)
         {
             var parts = input.Split("x");
@@ -24,7 +26,9 @@ public class Solution : Solver //, IDisplay
         .Sum(static box => box.Surface);
 
     public object PartTwo(string input)
-    {
-        return 0;
-    }
+    => input.AsMemory()
+        .SplitLine()
+        .AsEnumerable()
+        .Select(Box.Parse)
+        .Sum(static box => box.BowLength);
 }
