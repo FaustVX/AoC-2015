@@ -5,14 +5,17 @@ namespace AdventOfCode.Y2015.Day07;
 public class Solution : Solver //, IDisplay
 {
     public object PartOne(string input)
+    => Execute(input, "a", out _).Execute();
+
+    static Wire Execute(string input, string wireName, out IReadOnlyDictionary<string, Wire> wires)
     {
-        var wireA = new Wire()
+        var wire = new Wire()
         {
-            Name = "a",
+            Name = wireName,
         };
-        var wires = new DefaultableDictionary<string, Wire>(static name => new() { Name = name })
+        wires = new DefaultableDictionary<string, Wire>(static name => new() { Name = name })
         {
-            [wireA.Name] = wireA,
+            [wire.Name] = wire,
         };
 
 #pragma warning disable CS0612 //ObsoleteAttribute
@@ -72,7 +75,7 @@ public class Solution : Solver //, IDisplay
             }
         }
 
-        return wireA.Execute();
+        return wire;
 
         static Wire GetWire(IReadOnlyDictionary<string, Wire> wires, string name)
         {
@@ -88,7 +91,15 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        var wireA = Execute(input, "a", out var wires);
+        var value = wireA.Execute();
+        foreach (var wire in wires.Values)
+            wire.Reset();
+        wires["b"].From = new ValueOperation()
+        {
+            Value = value,
+        };
+        return wireA.Execute();
     }
 }
 
@@ -100,6 +111,8 @@ sealed class Wire
     public ushort Execute() => _value ??= From.Execute();
     public override string ToString()
     => Name;
+    public void Reset()
+    => _value = null;
 }
 
 abstract class Operation
