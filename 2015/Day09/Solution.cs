@@ -46,7 +46,9 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        ParseInput(input);
+        var locations = ImmutableList.CreateRange(Location.Locations.Values);
+        return CreatePath(locations, ImmutableStack<Location>.Empty).Max(CalculatePathLength);
     }
 }
 
