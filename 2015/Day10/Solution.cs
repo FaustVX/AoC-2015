@@ -5,14 +5,16 @@ namespace AdventOfCode.Y2015.Day10;
 public class Solution : Solver //, IDisplay
 {
     public object PartOne(string input)
+    => LookAndSay(input, 40);
+
+    private static int LookAndSay(string input, int maxRound)
     {
-        for (var round = 0; round < 40; round++)
+        for (var round = 0; round < maxRound; round++)
         {
             var sb = new StringBuilder();
             var last = input[0];
             var count = 1;
             for (var i = 1; i < input.Length; i++)
-            {
                 if (input[i] == last)
                     count++;
                 else
@@ -21,15 +23,12 @@ public class Solution : Solver //, IDisplay
                     last = input[i];
                     count = 1;
                 }
-            }
             sb.Append(count).Append(last);
             input = sb.ToString();
         }
-        return checked(input.Length);
+        return input.Length;
     }
 
     public object PartTwo(string input)
-    {
-        return 0;
-    }
+    => LookAndSay(input, 50);
 }
