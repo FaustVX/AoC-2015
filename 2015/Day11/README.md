@@ -25,3 +25,7 @@ For example:
 Given Santa's current password (your puzzle input), what should his _next password_ be?
 
 
+## --- Part Two ---
+Santa's password expired again.  What's the next one?
+
+

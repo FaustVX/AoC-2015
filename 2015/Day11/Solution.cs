@@ -8,11 +8,16 @@ public class Solution : Solver //, IDisplay
     {
         Span<char> span = stackalloc char[input.Length];
         input.AsSpan().CopyTo(span);
+        return NextPassword(span).ToString();
+    }
+
+    private static Span<char> NextPassword(Span<char> input)
+    {
         do
         {
-            Increment(span);
-        } while (!IsValid(span));
-        return span.ToString();
+            Increment(input);
+        } while (!IsValid(input));
+        return input;
     }
 
     private static bool IsValid(Span<char> span)
@@ -52,6 +57,8 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        Span<char> span = stackalloc char[input.Length];
+        input.AsSpan().CopyTo(span);
+        return NextPassword(NextPassword(span)).ToString();
     }
 }
