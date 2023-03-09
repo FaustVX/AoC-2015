@@ -8,10 +8,10 @@ public class Solution : Solver //, IDisplay
     public object PartOne(string input)
     {
         var json = JsonDocument.Parse(input);
-        return Sum(json.RootElement);
+        return Sum(json.RootElement, false);
     }
 
-    private static int Sum(JsonElement element)
+    private static int Sum(JsonElement element, bool ignoreRed)
     {
         switch (element.ValueKind)
         {
@@ -19,14 +19,17 @@ public class Solution : Solver //, IDisplay
             {
                 var i = 0;
                 foreach (var item in element.EnumerateArray())
-                    i += Sum(item);
+                    i += Sum(item, ignoreRed);
                 return i;
             }
             case JsonValueKind.Object:
             {
                 var i = 0;
                 foreach (var item in element.EnumerateObject())
-                    i += Sum(item.Value);
+                    if (ignoreRed && item.Value.ValueKind is JsonValueKind.String && item.Value.GetString() is "red")
+                        return 0;
+                    else
+                        i += Sum(item.Value, ignoreRed);
                 return i;
             }
             case JsonValueKind.Number:
@@ -38,6 +41,7 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        var json = JsonDocument.Parse(input);
+        return Sum(json.RootElement, true);
     }
 }
