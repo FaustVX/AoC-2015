@@ -86,9 +86,22 @@ public class Solution : Solver //, IDisplay
         }
     }
 
+    private static int CalculateSetCalories(ImmutableHashSet<Quantity> set)
+    {
+        var calories = 0;
+
+        foreach (var (quantity, ingredient) in set)
+            calories += quantity * ingredient.Calories;
+
+        return calories;
+    }
+
     public object PartTwo(string input)
     {
-        return 0;
+        var ingredients = ParseInput(input);
+        var sets = Combine(ingredients, 100)
+            .Where(static s => CalculateSetCalories(s) == 500);
+        return sets.Max(CalculateSetScoreWithoutCalories);
     }
 }
 
