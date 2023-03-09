@@ -2,6 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "remove obj",
+            "command": "(rm -Force -r ${workspaceFolder}/lib/aoc/obj) -or ($true)",
+            "type": "shell",
+            "problemMatcher": "$msCompile",
+            "options": {
+                "statusbar": {
+                    "hide": true,
+                }
+            }
+        },
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",
@@ -14,7 +25,10 @@
                 "statusbar": {
                     "hide": true,
                 }
-            }
+            },
+            "dependsOn":[
+                "remove obj"
+            ]
         },
         {
             "label": "update today",
@@ -62,11 +76,6 @@
                 "${relativeFileDirname}"
             ],
             "problemMatcher": [],
-            "options": {
-                "statusbar": {
-                    "filePattern": "Solution\\.cs"
-                }
-            },
         },
         {
             "label": "upload",
@@ -83,9 +92,6 @@
                 "env": {
                     "SESSION": "${input:session}"
                 },
-                "statusbar": {
-                    "filePattern": "Solution\\.cs"
-                }
             },
         },
         {
@@ -100,11 +106,6 @@
             "presentation": {
                 "focus": true,
             },
-            "options": {
-                "statusbar": {
-                    "filePattern": "Solution\\.cs"
-                }
-            },
         },
         {
             "label": "benchmark",
@@ -117,11 +118,6 @@
                 "${relativeFileDirname}"
             ],
             "problemMatcher": [],
-            "options": {
-                "statusbar": {
-                    "filePattern": "Solution\\.cs"
-                }
-            },
         },
     ],
     "inputs": [
