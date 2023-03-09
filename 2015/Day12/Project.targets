@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <!-- <DefineConstants>Y2015D12JSON</DefineConstants> -->
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="2015/Day12/Solution.JSON.cs" Condition="!$(DefineConstants.Contains('Y2015D12JSON'))"/>
+    <Compile Remove="2015/Day12/Solution.cs" Condition="$(DefineConstants.Contains('Y2015D12JSON'))"/>
+  </ItemGroup>
+</Project>
