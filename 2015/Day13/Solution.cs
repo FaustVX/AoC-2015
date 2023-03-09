@@ -8,9 +8,7 @@ public class Solution : Solver //, IDisplay
     public object PartOne(string input)
     {
         ParseInput(input);
-        var locations = ImmutableList.CreateRange(Person.People.Values);
-        var table = CreatePath(locations, ImmutableStack<Person>.Empty).MaxBy(CalculateTotalHappiness)!;
-        return CalculateTotalHappiness(table);
+        return CreatePath(ImmutableList.CreateRange(Person.People.Values), ImmutableStack<Person>.Empty).Max(CalculateTotalHappiness);
     }
 
     private int CalculateTotalHappiness(ImmutableStack<Person> table)
@@ -53,7 +51,13 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        ParseInput(input);
+        foreach (var person in Person.People.Values.ToImmutableArray())
+        {
+            Happiness.Happinesses[(Person.People["Me"], person)] = 0;
+            Happiness.Happinesses[(person, Person.People["Me"])] = 0;
+        }
+        return CreatePath(ImmutableList.CreateRange(Person.People.Values), ImmutableStack<Person>.Empty).Max(CalculateTotalHappiness);
     }
 }
 
