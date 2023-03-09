@@ -29,13 +29,24 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        var reindeers = ParseInput(input);
+        for (var second = 0; second < 2503; second++)
+        {
+            foreach (var reindeer in reindeers)
+                reindeer.NextSecond(second);
+            var maxDistance = reindeers.Max(static r => r.DistanceTraveled);
+            foreach (var reindeer in reindeers)
+                if (reindeer.DistanceTraveled == maxDistance)
+                    reindeer.Point++;
+        }
+        return reindeers.Max(static r => r.Point);
     }
 }
 
 record class Reindeer(string Name, int Speed, int FlightDuration, int RestDuration)
 {
     public int DistanceTraveled { get; private set; }
+    public int Point { get; set; }
     private readonly int _durationCycle = FlightDuration + RestDuration;
     public void NextSecond(int totalSecond)
     {
