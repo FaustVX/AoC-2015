@@ -9,7 +9,7 @@ public class Solution : Solver //, IDisplay
     public object PartOne(string input)
     {
         var aunts = Parseinput(input);
-        return aunts.First(static a => a.IsValidFor(3, 7, 2, 3, 0, 0, 5, 3, 2, 1)).Id;
+        return aunts.First(static a => a.IsValidForPart1(3, 7, 2, 3, 0, 0, 5, 3, 2, 1)).Id;
     }
 
     private static List<AuntSue> Parseinput(ReadOnlySpan<char> input)
@@ -42,26 +42,49 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        var aunts = Parseinput(input);
+        return aunts.First(static a => a.IsValidForPart2(3, 7, 2, 3, 0, 0, 5, 3, 2, 1)).Id;
     }
 }
 
 public record AuntSue(int Id, int? Children, int? Cats, int? Samoyeds, int? Pomeranians, int? Akitas, int? Vizslas, int? Goldfish, int? Trees, int? Cars, int? Perfumes)
 {
-    public bool IsValidFor(int children, int cats, int samoyeds, int pomeranians, int akitas, int vizslas, int goldfish, int trees, int cars, int perfumes)
+    public bool IsValidForPart1(int children, int cats, int samoyeds, int pomeranians, int akitas, int vizslas, int goldfish, int trees, int cars, int perfumes)
     {
-        return IsValid(Children, children)
-            && IsValid(Cats, cats)
-            && IsValid(Samoyeds, samoyeds)
-            && IsValid(Pomeranians, pomeranians)
-            && IsValid(Akitas, akitas)
-            && IsValid(Vizslas, vizslas)
-            && IsValid(Goldfish, goldfish)
-            && IsValid(Trees, trees)
-            && IsValid(Cars, cars)
-            && IsValid(Perfumes, perfumes);
+        return IsEquals(Children, children)
+            && IsEquals(Cats, cats)
+            && IsEquals(Samoyeds, samoyeds)
+            && IsEquals(Pomeranians, pomeranians)
+            && IsEquals(Akitas, akitas)
+            && IsEquals(Vizslas, vizslas)
+            && IsEquals(Goldfish, goldfish)
+            && IsEquals(Trees, trees)
+            && IsEquals(Cars, cars)
+            && IsEquals(Perfumes, perfumes);
 
-        static bool IsValid(int? property, int value)
+        static bool IsEquals(int? property, int value)
         => property is null || property == value;
+    }
+    public bool IsValidForPart2(int children, int cats, int samoyeds, int pomeranians, int akitas, int vizslas, int goldfish, int trees, int cars, int perfumes)
+    {
+        return IsEquals(Children, children)
+            && IsGreater(Cats, cats)
+            && IsEquals(Samoyeds, samoyeds)
+            && IsLess(Pomeranians, pomeranians)
+            && IsEquals(Akitas, akitas)
+            && IsEquals(Vizslas, vizslas)
+            && IsLess(Goldfish, goldfish)
+            && IsGreater(Trees, trees)
+            && IsEquals(Cars, cars)
+            && IsEquals(Perfumes, perfumes);
+
+        static bool IsEquals(int? property, int value)
+        => property is null || property == value;
+
+        static bool IsGreater(int? property, int value)
+        => property is null || property > value;
+
+        static bool IsLess(int? property, int value)
+        => property is null || property < value;
     }
 }
