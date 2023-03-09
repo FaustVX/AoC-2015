@@ -28,7 +28,7 @@
             },
             "dependsOn":[
                 "remove obj"
-            ]
+            ],
         },
         {
             "label": "update today",
@@ -41,12 +41,16 @@
             "problemMatcher": [],
             "options": {
                 "statusbar": {
-                    "tooltip": "Retrive datas from AoC"
+                    "tooltip": "Retrive datas from AoC",
+                    "label": "$(cloud-download) Today",
                 },
                 "env": {
                     "SESSION": "${input:session}"
                 }
             },
+            "dependsOn":[
+                "remove obj"
+            ],
         },
         {
             "label": "update",
@@ -59,12 +63,16 @@
             "problemMatcher": [],
             "options": {
                 "statusbar": {
-                    "tooltip": "Retrive datas from AoC"
+                    "tooltip": "Retrive datas from AoC",
+                    "label": "$(cloud-download)",
                 },
                 "env": {
                     "SESSION": "${input:session}"
-                }
+                },
             },
+            "dependsOn":[
+                "remove obj"
+            ],
         },
         {
             "label": "run",
@@ -76,6 +84,15 @@
                 "${relativeFileDirname}"
             ],
             "problemMatcher": [],
+            "options": {
+                "statusbar": {
+                    "label": "$(run)",
+                    "tooltip": "Run",
+                },
+            },
+            "dependsOn":[
+                "remove obj"
+            ],
         },
         {
             "label": "upload",
@@ -89,10 +106,17 @@
             ],
             "problemMatcher": [],
             "options": {
+                "statusbar": {
+                    "label": "$(cloud-upload)",
+                    "tooltip": "Upload",
+                },
                 "env": {
                     "SESSION": "${input:session}"
                 },
             },
+            "dependsOn":[
+                "remove obj"
+            ],
         },
         {
             "label": "display",
@@ -106,6 +130,15 @@
             "presentation": {
                 "focus": true,
             },
+            "options": {
+                "statusbar": {
+                    "label": "$(preview)",
+                    "tooltip": "Display",
+                },
+            },
+            "dependsOn":[
+                "remove obj"
+            ],
         },
         {
             "label": "benchmark",
@@ -118,6 +151,15 @@
                 "${relativeFileDirname}"
             ],
             "problemMatcher": [],
+            "options": {
+                "statusbar": {
+                    "label": "$(watch)",
+                    "tooltip": "Benchmark",
+                },
+            },
+            "dependsOn":[
+                "remove obj"
+            ],
         },
     ],
     "inputs": [
