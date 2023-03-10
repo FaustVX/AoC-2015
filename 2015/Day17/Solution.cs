@@ -47,7 +47,9 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        var barrels = ParseInput(input);
+        var sets = Combine(barrels, Globals.IsTestInput ? 25 : 150);
+        return sets.GroupBy(static set => set.Count()).MinBy(static g => g.Key)!.Count();
     }
 }
 class Barrel
