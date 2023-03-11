@@ -8,7 +8,7 @@ BenchmarkDotNet=v0.13.2, OS=Windows 11 (10.0.22000.1574/21H2)
 
 
 ```
-|  Method |      Mean |     Error |   StdDev | Allocated |
-|-------- |----------:|----------:|---------:|----------:|
-| PartOne | 788.98 ms | 10.231 ms | 9.069 ms |     408 B |
-| PartTwo |  93.29 ms |  1.243 ms | 1.038 ms |      88 B |
+|  Method |     Mean |    Error |   StdDev | Allocated |
+|-------- |---------:|---------:|---------:|----------:|
+| PartOne | 12.39 ms | 0.073 ms | 0.065 ms |      30 B |
+| PartTwo | 94.03 ms | 1.533 ms | 1.280 ms |      88 B |

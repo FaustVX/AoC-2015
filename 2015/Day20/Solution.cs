@@ -8,7 +8,8 @@ public class Solution : Solver //, IDisplay
     {
         var requestedPresents = int.Parse(input);
         var house = 1;
-        while (SumOfPresents(house, (int)Math.Sqrt(house) + 1, 10) < requestedPresents)
+        var maxElves = (int)Math.Sqrt(house) + 1;
+        while (SumOfPresents(house, maxElves, 10) < requestedPresents)
             house += 1;
         return house;
     }
