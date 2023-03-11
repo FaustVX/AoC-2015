@@ -8,26 +8,29 @@ public class Solution : Solver //, IDisplay
     {
         var requestedPresents = int.Parse(input);
         var house = 1;
-        while (SumOfPresents(house) < requestedPresents)
+        while (SumOfPresents(house, (int)Math.Sqrt(house) + 1, 10) < requestedPresents)
             house += 1;
         return house;
     }
 
-    private static int SumOfPresents(int house)
+    private static int SumOfPresents(int house, int maxElves, int qtyPerElf)
     {
         var sum = 0;
-        var d = (int)Math.Sqrt(house) + 1;
-        for (var elf = 1; elf <= d; elf++)
+        for (var elf = 1; elf <= maxElves; elf++)
             if (house % elf == 0)
             {
                 sum += elf;
                 sum += house / elf;
             }
-        return sum * 10;
+        return sum * qtyPerElf;
     }
 
     public object PartTwo(string input)
     {
-        return 0;
+        var requestedPresents = int.Parse(input);
+        var house = 1;
+        while (SumOfPresents(house, 50, 11) < requestedPresents)
+            house += 1;
+        return house;
     }
 }
