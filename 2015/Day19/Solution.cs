@@ -46,8 +46,16 @@ public class Solution : Solver //, IDisplay
         throw new UnreachableException();
     }
 
+    private static int ReplaceTo(IReadOnlyDictionary<string, IReadOnlyList<string>> replacements, IReadOnlySet<string> molecules, string requestedMolecule, int depth = 1)
+    {
+        if (molecules.Any(molecule => molecule == requestedMolecule))
+            return depth;
+        return ReplaceTo(replacements, molecules.SelectMany(molecule => Replace1(replacements, molecule)).ToHashSet(), requestedMolecule, depth + 1);
+    }
+
     public object PartTwo(string input)
     {
-        return 0;
+        var (replacements, molecule) = ParseInput(input.AsMemory());
+        return ReplaceTo(replacements, Replace1(replacements, "e"), molecule);
     }
 }
