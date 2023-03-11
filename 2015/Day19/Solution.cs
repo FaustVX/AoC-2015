@@ -26,7 +26,7 @@ public class Solution : Solver //, IDisplay
         return (replacements, new(molecule.Span));
     }
 
-    private static (IReadOnlyList<(string from, string to)> replacements, char[] requestedMolecule) ParseInputPart2(ReadOnlyMemory<char> input)
+    private static (IEnumerable<(string from, string to)> replacements, char[] requestedMolecule) ParseInputPart2(ReadOnlyMemory<char> input)
     {
 #pragma warning disable CS0612 //ObsoleteAttribute
         if (input.Split2Lines().Span is not [var rep, var molecule])
@@ -38,8 +38,7 @@ public class Solution : Solver //, IDisplay
             .AsEnumerable()
             .Select(ParseReplacement)
             .Select(static t => (t.outputs, t.input))
-            .OrderByDescending(static t => t.outputs.Length)
-            .ToArray();
+            .OrderByDescending(static t => t.outputs.Length);
 
         var mol = new char[molecule.Length];
         molecule.CopyTo(mol);
@@ -93,24 +92,31 @@ public class Solution : Solver //, IDisplay
         return false;
     }
 
+    // Copied from https://www.reddit.com/r/adventofcode/comments/3xflz8/comment/cy4cu5b
     public object PartTwo(string input)
     {
-        (var replacements, Span<char> molecule) = ParseInputPart2(input.AsMemory());
-
-        for (var i = 0;; i++)
+        var rng = new Random(0);
+        var (reps, molecule) = ParseInputPart2(input.AsMemory());
+        var target = molecule.AsSpan();
+        var steps = 0;
+        while (target is not ['e'])
         {
-            if (molecule is ['e'])
-                return i;
-            if (molecule is [])
-                throw new UnreachableException();
-            foreach (var (from, to) in replacements)
+            var tmp = target;
+            foreach (var (a, b) in reps)
             {
-                if (Replace(molecule, from, to))
-                {
-                    molecule = molecule.TrimEnd('\0');
-                    break;
-                }
+                if (target.IndexOf(a) == -1)
+                    continue;
+                Replace(target, a, b);
+                target = target.TrimEnd('\0');
+                steps++;
+            }
+            if (tmp.SequenceEqual(target))
+            {
+                target = molecule;
+                steps = 0;
+                reps.OrderBy(_ => rng.Next());
             }
         }
+        return steps;
     }
 }
