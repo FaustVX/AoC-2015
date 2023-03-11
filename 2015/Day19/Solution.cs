@@ -26,7 +26,7 @@ public class Solution : Solver //, IDisplay
         return (replacements, new(molecule.Span));
     }
 
-    private static (IEnumerable<(string from, string to)> replacements, char[] requestedMolecule) ParseInputPart2(ReadOnlyMemory<char> input)
+    private static (IEnumerable<(string from, string to)> replacements, string requestedMolecule) ParseInputPart2(ReadOnlyMemory<char> input)
     {
 #pragma warning disable CS0612 //ObsoleteAttribute
         if (input.Split2Lines().Span is not [var rep, var molecule])
@@ -40,10 +40,7 @@ public class Solution : Solver //, IDisplay
             .Select(static t => (t.outputs, t.input))
             .OrderByDescending(static t => t.outputs.Length);
 
-        var mol = new char[molecule.Length];
-        molecule.CopyTo(mol);
-
-        return (replacements, mol);
+        return (replacements, new string(molecule.Span));
     }
 
     private static HashSet<string> Replace1(IReadOnlyDictionary<string, IReadOnlyList<string>> replacements, string molecule)
@@ -66,57 +63,21 @@ public class Solution : Solver //, IDisplay
         throw new UnreachableException();
     }
 
-    private static bool Replace(Span<char> molecule, ReadOnlySpan<char> from, ReadOnlySpan<char> to)
-    {
-        for (var i = from.Length; i <= molecule.Length; i++)
-            if (molecule.Slice(i - from.Length, from.Length) is var slice && slice.SequenceEqual(from))
-            {
-                var offset = from.Length - to.Length;
-                foreach (ref var c in slice)
-                {
-                    c = to[0];
-                    (_, to) = to;
-                    if (to.IsEmpty)
-                        break;
-                }
-                if (offset is 0)
-                    return true;
-                for (var x = i; x < molecule.Length; x++)
-                {
-                    molecule[i - offset] = molecule[i];
-                    molecule[i] = '\0';
-                }
-                molecule[^1] = '\0';
-                return true;
-            }
-        return false;
-    }
-
-    // Copied from https://www.reddit.com/r/adventofcode/comments/3xflz8/comment/cy4cu5b
+    // https://www.reddit.com/r/adventofcode/comments/3xflz8/comment/cy4cvo1
     public object PartTwo(string input)
     {
-        var rng = new Random(0);
         var (reps, molecule) = ParseInputPart2(input.AsMemory());
-        var target = molecule.AsSpan();
         var steps = 0;
-        while (target is not ['e'])
-        {
-            var tmp = target;
-            foreach (var (a, b) in reps)
-            {
-                if (target.IndexOf(a) == -1)
-                    continue;
-                Replace(target, a, b);
-                target = target.TrimEnd('\0');
-                steps++;
-            }
-            if (tmp.SequenceEqual(target))
-            {
-                target = molecule;
-                steps = 0;
-                reps.OrderBy(_ => rng.Next());
-            }
-        }
+        while (molecule != "e")
+            foreach (var (to, from) in reps)
+                if (molecule.LastIndexOf(to) is var pos and not -1)
+                {
+                    molecule = Replace(molecule, to, from, pos);
+                    steps++;
+                }
         return steps;
+
+        static string Replace(string s, string from, string to, int pos)
+        => $"{s[..pos]}{to}{s[(pos + from.Length)..]}";
     }
 }

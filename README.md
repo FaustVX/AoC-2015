@@ -30,12 +30,6 @@ start working on your own. The framework part is pretty stable and you get testi
 - This project is based on `.NET 7`  and `C# 11`. It should work on Windows, Linux and OS-X.
 - `AngleSharp` is used for problem download.
 
-## Additional Infos
-
-This project uses some `git notes`, tu use them:
-- `git push origin refs/notes/*` to push them
-- `git fetch origin refs/notes/*:refs/notes/*` to fetch them
-
 ## Running
 
 To run the project:
