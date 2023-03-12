@@ -5,23 +5,27 @@ namespace AdventOfCode.Y2015.Day21;
 public class Solution : Solver //, IDisplay
 {
     public object PartOne(string input)
+    => Execute(input, lookForMinGold: true);
+
+    private static int Execute(string input, bool lookForMinGold)
     {
         var boss = ParseInput(input);
-        var minGoldSpent = int.MaxValue;
+        var lastGoldSpent = lookForMinGold ? int.MaxValue : 0;
 
         foreach (var (weapon, armor, dualRing) in GetItems())
         {
             var goldSpent = weapon.Gold + armor.Gold + dualRing.Gold;
-            if (goldSpent >= minGoldSpent)
+
+            if (lookForMinGold ? goldSpent >= lastGoldSpent : goldSpent <= lastGoldSpent)
                 continue;
 
             var me = new Character("Me", 100, weapon.Attack + dualRing.Attack, armor.Defense + dualRing.Defense);
 
-            if (IsPlayerAlive(me, boss))
-                minGoldSpent = goldSpent;
+            if (IsPlayerAlive(me, boss) == lookForMinGold)
+                lastGoldSpent = goldSpent;
         }
 
-        return minGoldSpent;
+        return lastGoldSpent;
     }
 
     private static Character ParseInput(ReadOnlySpan<char> input)
@@ -108,9 +112,7 @@ public class Solution : Solver //, IDisplay
     }
 
     public object PartTwo(string input)
-    {
-        return 0;
-    }
+    => Execute(input, lookForMinGold: false);
 }
 
 readonly record struct Item(string Name, int Gold, int Attack, int Defense)
