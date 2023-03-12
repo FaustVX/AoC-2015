@@ -80,7 +80,7 @@ public class Solution : Solver //, IDisplay
                 yield return Item.Weapon("Damage +3", 100, 3);
                 yield return Item.Armor("Defense +1", 20, 1);
                 yield return Item.Armor("Defense +2", 40, 2);
-                yield return Item.Armor("Defense +3", 60, 3);
+                yield return Item.Armor("Defense +3", 80, 3);
             }
         }
     }
