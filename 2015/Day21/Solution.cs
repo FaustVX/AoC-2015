@@ -33,11 +33,11 @@ public class Solution : Solver //, IDisplay
         var lines = input.EnumerateLines();
 
         lines.MoveNext();
-        var hp = int.Parse(lines.Current[12..]);
+        var hp = int.Parse(lines.Current.Slice(lines.Current.IndexOf(':') + 1));
         lines.MoveNext();
-        var att = int.Parse(lines.Current[8..]);
+        var att = int.Parse(lines.Current.Slice(lines.Current.IndexOf(':') + 1));
         lines.MoveNext();
-        var def = int.Parse(lines.Current[7..]);
+        var def = int.Parse(lines.Current.Slice(lines.Current.IndexOf(':') + 1));
 
         return new("Boss", hp, att, def);
     }
