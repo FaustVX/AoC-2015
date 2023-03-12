@@ -8,39 +8,18 @@ public class Solution : Solver //, IDisplay
     {
         var boss = ParseInput(input);
         var minGoldSpent = int.MaxValue;
-        var (weapons, armors, dualRings) = GetStoreItems();
 
-        foreach (var weapon in weapons)
-            foreach (var armor in armors)
-                foreach (var dualRing in dualRings)
-                {
-                    var goldSpent = weapon.Gold + armor.Gold + dualRing.Gold;
-                    if (goldSpent >= minGoldSpent)
-                        continue;
+        foreach (var (weapon, armor, dualRing) in GetItems())
+        {
+            var goldSpent = weapon.Gold + armor.Gold + dualRing.Gold;
+            if (goldSpent >= minGoldSpent)
+                continue;
 
-                    var me = new Character("Me", 100, 0, 0);
-                    var combatBoss = boss; // copy boss
+            var me = new Character("Me", 100, weapon.Attack + dualRing.Attack, armor.Defense + dualRing.Defense);
 
-                    me.AddItem(weapon);
-                    me.AddItem(armor);
-                    me.AddItem(dualRing);
-
-                    var attackMe = Math.Max(1, me.Attack - boss.Defense);
-                    var attackBoss = Math.Max(1, boss.Attack - me.Defense);
-
-                    do
-                    {
-                        combatBoss.HP -= attackMe;
-                        if (combatBoss.HP <= 0)
-                        {
-                            minGoldSpent = goldSpent;
-                            break;
-                        }
-                        me.HP -= attackBoss;
-                        if (me.HP <= 0)
-                            break;
-                    } while (true);
-                }
+            if (IsPlayerAlive(me, boss))
+                minGoldSpent = goldSpent;
+        }
 
         return minGoldSpent;
     }
@@ -102,6 +81,32 @@ public class Solution : Solver //, IDisplay
         }
     }
 
+    private static IEnumerable<(Item weapon, Item armor, Item dualRings)> GetItems()
+    {
+        var (weapons, armors, dualRings) = GetStoreItems();
+
+        foreach (var weapon in weapons)
+            foreach (var armor in armors)
+                foreach (var dualRing in dualRings)
+                    yield return (weapon, armor, dualRing);
+    }
+
+    private static bool IsPlayerAlive(Character me, Character boss)
+    {
+        var attackMe = Math.Max(1, me.Attack - boss.Defense);
+        var attackBoss = Math.Max(1, boss.Attack - me.Defense);
+
+        do
+        {
+            boss.HP -= attackMe;
+            if (boss.HP <= 0)
+                return true;
+            me.HP -= attackBoss;
+            if (me.HP <= 0)
+                return false;
+        } while (true);
+    }
+
     public object PartTwo(string input)
     {
         return 0;
@@ -122,11 +127,4 @@ readonly record struct Item(string Name, int Gold, int Attack, int Defense)
     => new($"{item1.Name} + {item2.Name}", item1.Gold + item2.Gold, item1.Attack + item2.Attack, item1.Defense + item2.Defense);
 }
 
-record struct Character(string Name, int HP, int Attack, int Defense)
-{
-    public void AddItem(Item item)
-    {
-        Attack += item.Attack;
-        Defense += item.Defense;
-    }
-}
+record struct Character(string Name, int HP, int Attack, int Defense);
