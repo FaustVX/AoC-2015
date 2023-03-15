@@ -31,11 +31,11 @@ public class Solution : Solver //, IDisplay
                 continue;
             var (combatMe, combatBoss) = (me.Copy(), boss.Copy());
             var combat = combatMe.Combat(combatBoss, spell);
-            if (me.ManaSpent >= 100_000)
+            if (combatMe.ManaSpent >= 100_000)
                 continue;
             if (combat is false)
                 continue;
-            if (combat is true && me.ManaSpent < minManaSpent)
+            if (combat is true && combatMe.ManaSpent < minManaSpent)
             {
                 minManaSpent = combatMe.ManaSpent;
                 continue;
