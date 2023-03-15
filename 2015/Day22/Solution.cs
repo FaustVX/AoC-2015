@@ -102,6 +102,8 @@ sealed record class Character(string Name, int hp, int attack, int mana)
         // My turn
         ApplyEffects();
         boss.ApplyEffects();
+        if (boss.HP <= 0)
+            return true;
 
         spell.Cast(this, boss);
         if (boss.HP <= 0)
@@ -110,6 +112,8 @@ sealed record class Character(string Name, int hp, int attack, int mana)
         // Boss turn
         ApplyEffects();
         boss.ApplyEffects();
+        if (boss.HP <= 0)
+            return true;
 
         HP -= boss.Attack;
         if (HP <= 0)
