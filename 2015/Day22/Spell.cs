@@ -21,6 +21,9 @@ abstract record class Spell(string Name, int ManaCost)
         yield return new PoisonSpell();
         yield return new RechargeSpell();
     }
+
+    public override sealed string ToString()
+    => $"{Name} for {ManaCost} mana";
 }
 
 sealed record class MagicMissileSpell() : Spell("Magic Missile", 53)

@@ -52,7 +52,7 @@ public class Solution : Solver //, IDisplay
     }
 }
 
-record class Character(string Name, int hp, int attack, int mana)
+sealed record class Character(string Name, int hp, int attack, int mana)
 {
     private int _hp = hp;
     public int HP
@@ -116,4 +116,7 @@ record class Character(string Name, int hp, int attack, int mana)
             return false;
         return null;
     }
+
+    public override string ToString()
+    => $"{Name}: {HP} hp";
 }

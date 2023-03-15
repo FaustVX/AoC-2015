@@ -11,6 +11,9 @@ abstract record class Effect(string Name, int Duration)
     }
 
     protected abstract void ApplyImpl(Character me);
+
+    public override sealed string ToString()
+    => $"{Name} for {Duration} turns";
 }
 
 sealed record class ShieldEffect() : Effect("Shield", 6)
