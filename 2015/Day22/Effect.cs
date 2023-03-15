@@ -8,8 +8,6 @@ abstract record class Effect(string Name, int Duration)
     {
         ApplyImpl(me);
         Duration--;
-        if (Duration <= 0)
-            me.Effects.Remove(this);
     }
 
     protected abstract void ApplyImpl(Character me);
