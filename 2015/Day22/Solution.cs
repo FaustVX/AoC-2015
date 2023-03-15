@@ -25,14 +25,13 @@ public class Solution : Solver //, IDisplay
 
     private static int Rounds(IReadOnlyList<Spell> spells, Character me, Character boss, int minManaSpent = int.MaxValue)
     {
+        var list = new List<(Character me, Character boss)>();
         foreach (var spell in spells)
         {
             if (!spell.IsValid(me))
                 continue;
             var (combatMe, combatBoss) = (me.Copy(), boss.Copy());
             var combat = combatMe.Combat(combatBoss, spell);
-            if (combatMe.ManaSpent >= 100_000)
-                continue;
             if (combat is false)
                 continue;
             if (combat is true)
@@ -41,10 +40,11 @@ public class Solution : Solver //, IDisplay
                     minManaSpent = combatMe.ManaSpent;
                 continue;
             }
-
+            list.Add((combatMe, combatBoss));
+        }
+        foreach (var (combatMe, combatBoss) in list)
             if (Rounds(spells, combatMe, combatBoss, minManaSpent) is var manaSpent && manaSpent < minManaSpent)
                 minManaSpent = manaSpent;
-        }
         return minManaSpent;
     }
 
