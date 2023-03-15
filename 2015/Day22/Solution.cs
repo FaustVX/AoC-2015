@@ -35,11 +35,13 @@ public class Solution : Solver //, IDisplay
                 continue;
             if (combat is false)
                 continue;
-            if (combat is true && combatMe.ManaSpent < minManaSpent)
+            if (combat is true)
             {
-                minManaSpent = combatMe.ManaSpent;
+                if (combatMe.ManaSpent < minManaSpent)
+                    minManaSpent = combatMe.ManaSpent;
                 continue;
             }
+
             if (Rounds(spells, combatMe, combatBoss, minManaSpent) is var manaSpent && manaSpent < minManaSpent)
                 minManaSpent = manaSpent;
         }
