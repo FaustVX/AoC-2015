@@ -98,15 +98,17 @@ record class Character(string Name, int hp, int attack, int mana)
 
     public bool? Combat(Character boss, Spell spell)
     {
+        // My turn
         ApplyEffects();
         boss.ApplyEffects();
 
         spell.Cast(this, boss);
-
-        if (HP <= 0)
-            return false;
         if (boss.HP <= 0)
             return true;
+
+        // Boss turn
+        ApplyEffects();
+        boss.ApplyEffects();
 
         HP -= boss.Attack;
         if (HP <= 0)
