@@ -27,7 +27,7 @@ class Genetic
 
     public int Run()
     {
-        var bestFitness = int.MaxValue;
+        var (bestFitness, bestChar) = (int.MaxValue, (Character)null!);
         CalculateAllFitness();
 
         var i = 2_500;
@@ -35,7 +35,7 @@ class Genetic
         {
             NextGeneration();
             if (_fitness[_fittest] < bestFitness)
-                bestFitness = _fitness[_fittest];
+                (bestFitness, bestChar) = (_fitness[_fittest], _players[_fittest].Copy());
             if (i <= 0)
                 break;
             ResetPlayers();
