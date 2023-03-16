@@ -8,7 +8,7 @@ public class Solution : Solver //, IDisplay
     {
         var boss = ParseInput(input);
         var me = Character.CreatePlayer();
-        return Rounds(Spell.GetSpells().ToList(), me, boss);
+        return new Genetic(boss).Run();
     }
 
     private static Character ParseInput(ReadOnlySpan<char> input)
@@ -21,31 +21,6 @@ public class Solution : Solver //, IDisplay
         var att = int.Parse(lines.Current.Slice(lines.Current.IndexOf(':') + 1));
 
         return Character.CreateBoss(hp, att);
-    }
-
-    private static int Rounds(IReadOnlyList<Spell> spells, Character me, Character boss, int minManaSpent = int.MaxValue)
-    {
-        var list = new List<(Character me, Character boss)>();
-        foreach (var spell in spells)
-        {
-            if (!spell.IsValid(me))
-                continue;
-            var (combatMe, combatBoss) = (me.Copy(), boss.Copy());
-            var combat = combatMe.Combat(combatBoss, spell);
-            if (combat is false)
-                continue;
-            if (combat is true)
-            {
-                if (combatMe.ManaSpent < minManaSpent)
-                    minManaSpent = combatMe.ManaSpent;
-                continue;
-            }
-            list.Add((combatMe, combatBoss));
-        }
-        foreach (var (combatMe, combatBoss) in list)
-            if (Rounds(spells, combatMe, combatBoss, minManaSpent) is var manaSpent && manaSpent < minManaSpent)
-                minManaSpent = manaSpent;
-        return minManaSpent;
     }
 
     public object PartTwo(string input)
@@ -82,6 +57,7 @@ sealed record class Character(string Name, int hp, int attack, int mana)
     public int Defense { get; set; }
     public HashSet<Effect> Effects { get; private init; } = new(capacity: 3);
     public int ManaSpent { get; set; }
+    public List<Spell> Spells { get; init; } = new(capacity: 0);
     public int SpellsUsed { get; private set; }
 
     public void ApplyEffects()
@@ -101,12 +77,15 @@ sealed record class Character(string Name, int hp, int attack, int mana)
     => this with
     {
         Effects = new(Effects),
+        Spells = new(Spells),
     };
 
     public static Character CreateBoss(int hp, int attack)
     => new("Boss", hp, attack, 0);
     public static Character CreatePlayer()
     => Globals.IsTestInput ? new("Me", 10, 0, 250) : new("Me", 50, 0, 500);
+    public static Character CreatePlayer(List<Spell> spells)
+    => Globals.IsTestInput ? new("Me", 10, 0, 250) { Spells = spells } : new("Me", 50, 0, 500) { Spells = spells };
 
     public bool? Combat(Character boss, Spell spell)
     {
