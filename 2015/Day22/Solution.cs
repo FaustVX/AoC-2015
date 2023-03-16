@@ -85,9 +85,15 @@ sealed record class Character(string Name, int hp, int attack, int mana)
 
     public void ApplyEffects()
     {
-        foreach (var effect in Effects)
-            effect.Apply(this);
-        Effects.RemoveWhere(static e => e.Duration <= 0);
+        try
+        {
+            foreach (var effect in Effects)
+                effect.Apply(this);
+        }
+        finally
+        {
+            Effects.RemoveWhere(static e => e.Duration <= 0);
+        }
     }
 
     public Character Copy()
