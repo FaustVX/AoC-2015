@@ -7,9 +7,9 @@ class Genetic
     {
         _boss = boss.Copy();
         _rng = new(0);
-        MutationProbability = _rng.NextDouble() / 10;
-        LengthMutationProbability = _rng.NextDouble() / 10;
-        _players = GeneratePlayers().Take(10).ToArray();
+        MutationProbability = _rng.NextDouble() / 20;
+        LengthMutationProbability = _rng.NextDouble() / 50;
+        _players = GeneratePlayers().Take(75).ToArray();
         _fitness = new int[_players.Length];
         _fittest = _secondFittest = 0;
     }
@@ -30,7 +30,7 @@ class Genetic
         var bestFitness = int.MaxValue;
         CalculateAllFitness();
 
-        var i = 1_000;
+        var i = 2_500;
         while (true)
         {
             NextGeneration();
@@ -140,23 +140,25 @@ class Genetic
     private int CalculateFitness(Character player)
     {
         var boss = _boss.Copy();
+        var i = 0;
         foreach (var spell in player.Spells)
         {
             if (!spell.IsValid(player))
-                return int.MaxValue;
+                return int.MaxValue / (i + 1);
             var combat = player.Combat(boss, spell);
             if (combat is false)
-                return int.MaxValue;
+                return int.MaxValue / (i + 1);
             if (combat is true)
-                return player.ManaSpent;
+                return player.ManaSpent * (player.Spells.Count - i);
+                i++;
         }
-        return int.MaxValue;
+        return int.MaxValue / (player.HP > boss.HP ? 1000 : 1);
     }
 
     private IEnumerable<Character> GeneratePlayers()
     {
         while (true)
-            yield return Character.CreatePlayer(GenerateSpells().Take(_rng.Next(1, 10)).ToList());
+            yield return Character.CreatePlayer(GenerateSpells().Take(_rng.Next(3, 10)).ToList());
     }
     private IEnumerable<Spell> GenerateSpells()
     {
