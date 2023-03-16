@@ -7,7 +7,7 @@ public class Solution : Solver //, IDisplay
     public object PartOne(string input)
     {
         var boss = ParseInput(input);
-        var me = Globals.IsTestInput ? Character.CreatePlayer(10, 250) : Character.CreatePlayer(50, 500);
+        var me = Character.CreatePlayer();
         return Rounds(Spell.GetSpells().ToList(), me, boss);
     }
 
@@ -96,8 +96,8 @@ sealed record class Character(string Name, int hp, int attack, int mana)
 
     public static Character CreateBoss(int hp, int attack)
     => new("Boss", hp, attack, 0);
-    public static Character CreatePlayer(int hp, int mana)
-    => new("Me", hp, 0, mana);
+    public static Character CreatePlayer()
+    => Globals.IsTestInput ? new("Me", 10, 0, 250) : new("Me", 50, 0, 500);
 
     public bool? Combat(Character boss, Spell spell)
     {
