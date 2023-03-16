@@ -82,6 +82,7 @@ sealed record class Character(string Name, int hp, int attack, int mana)
     public int Defense { get; set; }
     public HashSet<Effect> Effects { get; private init; } = new(capacity: 3);
     public int ManaSpent { get; set; }
+    public int SpellsUsed { get; private set; }
 
     public void ApplyEffects()
     {
@@ -116,6 +117,7 @@ sealed record class Character(string Name, int hp, int attack, int mana)
             boss.ApplyEffects();
 
             spell.Cast(this, boss);
+            SpellsUsed++;
 
             // Boss turn
             ApplyEffects();
