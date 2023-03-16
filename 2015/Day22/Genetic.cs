@@ -80,10 +80,7 @@ class Genetic
         var (min1, min2) = (0, 1);
         for (var i = 0; i < _fitness.Length; i++)
             if (_fitness[i] < _fitness[min1])
-            {
-                min2 = min1;
-                min1 = i;
-            }
+                (min2, min1) = (min1, i);
             else if (_fitness[i] < _fitness[min2])
                 min2 = i;
         (_fittest, _secondFittest) = (min1, min2);
