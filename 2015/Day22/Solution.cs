@@ -71,6 +71,8 @@ sealed record class Character(string Name, int hp, int attack, int mana)
                     _hp--;
                 else
                     _hp = value;
+                if (_hp <= 0)
+                    throw new DeadException(this);
             }
         }
     }
@@ -101,28 +103,35 @@ sealed record class Character(string Name, int hp, int attack, int mana)
 
     public bool? Combat(Character boss, Spell spell)
     {
-        // My turn
-        ApplyEffects();
-        boss.ApplyEffects();
-        if (boss.HP <= 0)
-            return true;
+        try
+        {
+            // My turn
+            ApplyEffects();
+            boss.ApplyEffects();
 
-        spell.Cast(this, boss);
-        if (boss.HP <= 0)
-            return true;
+            spell.Cast(this, boss);
 
-        // Boss turn
-        ApplyEffects();
-        boss.ApplyEffects();
-        if (boss.HP <= 0)
-            return true;
+            // Boss turn
+            ApplyEffects();
+            boss.ApplyEffects();
 
-        HP -= boss.Attack;
-        if (HP <= 0)
-            return false;
-        return null;
+            HP -= boss.Attack;
+            return null;
+        }
+        catch (DeadException dead)
+        {
+            return ReferenceEquals(dead.Character, boss);
+        }
     }
 
     public override string ToString()
     => $"{Name}: {HP} hp";
+
+    private sealed class DeadException : Exception
+    {
+        public DeadException(Character character)
+        => Character = character;
+
+        public Character Character { get; }
+    }
 }
