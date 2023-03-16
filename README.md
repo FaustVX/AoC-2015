@@ -54,19 +54,19 @@ init [this .git repo] [sslSalt] ([sslPassword])    Initialize the current folder
 login to https://adventofcode.com, then copy your session cookie, and export
 it in your console like this
 
- export SESSION=73a37e9a72a...
+    export SESSION=73a37e9a72a...
 
 then run the app with
 
- update [year]/[day]   Prepares a folder for the given day, updates the input,
-                       the readme and creates a solution template.
- update today          Shortcut to the above.
+    update [year]/[day]   Prepares a folder for the given day, updates the input,
+                        the readme and creates a solution template.
+    update today          Shortcut to the above.
 
 3) To upload your answer:
 set up your SESSION variable as above.
 
- upload [year]/[day]   Upload the answer for the selected year and day.
- upload today          Shortcut to the above.
+    upload [year]/[day]   Upload the answer for the selected year and day.
+    upload today          Shortcut to the above.
 
 ```
 
