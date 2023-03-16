@@ -15,7 +15,12 @@ public class Solution : Solver //, IDisplay
 
     public object PartTwo(string input)
     {
-        return 0;
+        var cpu = new Computer();
+        cpu.RegA.Value = 1;
+#pragma warning disable CS0612 //ObsoleteAttribute
+        cpu.Run(input.SplitLine());
+#pragma warning restore CS0612
+        return Globals.IsTestInput ? cpu.RegA.Value : cpu.RegB.Value;
     }
 }
 
